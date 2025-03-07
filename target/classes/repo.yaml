@@ -1,0 +1,28 @@
+Home:
+  header: "//h1/span[contains(text(),'Wikipedia')]"
+  searchTextBox: "//input[@id='searchInput']"
+  searchLanguage: "//select[@id='searchLanguage']"
+  searchButton: "//button/i[text()='Search']"
+  ENGVersion: "//strong[normalize-space()='English']"
+SearchResults:
+  header: "//h1[text()='Hasil pencarian']"
+  searchResults: "//div[contains(@class,'searchresults')]"
+  totalResults: "//div[@class='results-info']/strong[2]"
+Content:
+  header: "//*[@id='firstHeading']"
+EnglishVersion:
+  header: "//*[@id='Welcome_to_Wikipedia']"
+  LoginNavbar : "//*[@id='pt-login-2']"
+Login:
+  header: "//*[@id='userloginForm']"
+  username : "//*[@id='wpName1']"
+  password : "//*[@id='wpPassword1']"
+  keepLoggedCheckBox : "//*[@id='wpRemember']"
+  login : "//*[@id='wpLoginAttempt']"
+  userPage : "//*[@id='p-vector-user-menu-userpage']"
+  userNotification : "//*[@id='p-vector-user-menu-notifications']"
+  profileDropdown : "//*[@id='vector-user-links-dropdown']"
+  profileDropdownList : "//*[@id='pt-userpage']"
+  logout : "//*[@id='p-user-menu-logout']"
+  logoutResults : "(//h1[normalize-space()='Log out'])[1]"
+

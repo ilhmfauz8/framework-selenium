@@ -1,0 +1,44 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="selenium-cucumber" />
+          <option value="selenium-cucumber" />
+          <option value="selenium-cucumber" />
+          <option value="All libs from selenium-cucumber-framework" />
+          <option value="All libs from selenium-cucumber-framework" />
+          <option value="All libs from selenium-cucumber-framework" />
+          <option value="All libs from selenium-cucumber-framework" />
+          <option value="selenium-cucumber" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="com.google.code.gson:gson:2.8.6" />
+          <option value="com.fasterxml.jackson.core:jackson-databind:2.10.3" />
+          <option value="com.fasterxml.jackson.core:jackson-core:2.10.3" />
+          <option value="com.fasterxml.jackson.core:jackson-core:2.10.3" />
+          <option value="org.bouncycastle:bcprov-jdk18on:1.76" />
+          <option value="com.fasterxml.jackson.core:jackson-databind:2.10.3" />
+          <option value="com.google.code.gson:gson:2.8.6" />
+          <option value="org.bouncycastle:bcprov-jdk18on:1.76" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Other" />
+          <option value="Not exploitable" />
+          <option value="Other" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
