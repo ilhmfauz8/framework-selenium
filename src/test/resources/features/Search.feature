@@ -1,4 +1,4 @@
-@Search
+@Search @RegressionTest
 Feature: Wikipedia Search Functionality
 
   Background:

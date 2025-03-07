@@ -16,11 +16,11 @@ public class ExtentReportManager {
             ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
             sparkReporter.config().setDocumentTitle("Automation Test Report");
             sparkReporter.config().setReportName("Test Execution Report");
-            sparkReporter.config().setTheme(Theme.DARK);
+            sparkReporter.config().setTheme(Theme.STANDARD);
 
             extent = new ExtentReports();
             extent.attachReporter(sparkReporter);
-            extent.setSystemInfo("Tester", "Your Name");
+            extent.setSystemInfo("Tester", "ILHAM FAUZI");
         }
         return extent;
     }
