@@ -1,31 +1,84 @@
 Home:
-  header: "//h1/span[contains(text(),'Wikipedia')]"
-  searchTextBox: "//input[@id='searchInput']"
-  searchLanguage: "//select[@id='searchLanguage']"
-  searchButton: "//button/i[text()='Search']"
-  ENGVersion: "//strong[normalize-space()='English']"
-SearchResults:
-  header: "//h1[text()='Hasil pencarian']"
-  searchResults: "//div[contains(@class,'searchresults')]"
-  totalResults: "//div[@class='results-info']/strong[2]"
-Content:
-  header: "//*[@id='firstHeading']"
-  filterLanguage: "//div[@id='p-lang-btn']"
-  BahasaIndonesia: "(//a[@title='Selenium – Indonesian'][normalize-space()='Bahasa Indonesia'])[1]"
-  textBahasa: "//div[@id='siteSub']"
-EnglishVersion:
-  header: "//*[@id='Welcome_to_Wikipedia']"
-  LoginNavbar : "//*[@id='pt-login-2']"
-Login:
-  header: "//*[@id='userloginForm']"
-  username : "//*[@id='wpName1']"
-  password : "//*[@id='wpPassword1']"
-  keepLoggedCheckBox : "//*[@id='wpRemember']"
-  login : "//*[@id='wpLoginAttempt']"
-  userPage : "//*[@id='p-vector-user-menu-userpage']"
-  userNotification : "//*[@id='p-vector-user-menu-notifications']"
-  profileDropdown : "//*[@id='vector-user-links-dropdown']"
-  profileDropdownList : "//*[@id='pt-userpage']"
-  logout : "//*[@id='p-user-menu-logout']"
-  logoutResults : "(//h1[normalize-space()='Log out'])[1]"
+  header:
+    type: xpath
+    value: "//h1/span[contains(text(),'Wikipedia')]"
+  searchTextBox:
+    type: id
+    value: "searchInput"
+  searchLanguage:
+    type: id
+    value: "searchLanguage"
+  searchButton:
+    type: xpath
+    value: "//button/i[text()='Search']"
+  ENGVersion:
+    type: xpath
+    value: "//strong[normalize-space()='English']"
 
+SearchResults:
+  header:
+    type: xpath
+    value: "//h1[text()='Hasil pencarian']"
+  searchResults:
+    type: xpath
+    value: "//div[contains(@class,'searchresults')]"
+  totalResults:
+    type: xpath
+    value: "//div[@class='results-info']/strong[2]"
+
+Content:
+  header:
+    type: xpath
+    value: "//*[@id='firstHeading']"
+  filterLanguage:
+    type: xpath
+    value: "//div[@id='p-lang-btn']"
+  BahasaIndonesia:
+    type: xpath
+    value: "(//a[@title='Selenium – Indonesian'][normalize-space()='Bahasa Indonesia'])[1]"
+  textBahasa:
+    type: xpath
+    value: "//div[@id='siteSub']"
+
+EnglishVersion:
+  header:
+    type: xpath
+    value: "//*[@id='Welcome_to_Wikipedia']"
+  LoginNavbar:
+    type: xpath
+    value: "//*[@id='pt-login-2']"
+
+Login:
+  header:
+    type: xpath
+    value: "//*[@id='userloginForm']"
+  username:
+    type: xpath
+    value: "//*[@id='wpName1']"
+  password:
+    type: xpath
+    value: "//*[@id='wpPassword1']"
+  keepLoggedCheckBox:
+    type: xpath
+    value: "//*[@id='wpRemember']"
+  login:
+    type: xpath
+    value: "//*[@id='wpLoginAttempt']"
+  userPage:
+    type: xpath
+    value: "//*[@id='p-vector-user-menu-userpage']"
+  userNotification:
+    type: xpath
+    value: "//*[@id='p-vector-user-menu-notifications']"
+  profileDropdown:
+    type: xpath
+    value: "//*[@id='vector-user-links-dropdown']"
+  profileDropdownList:
+    type: xpath
+    value: "//*[@id='pt-userpage']"
+  logout:
+    type: xpath
+    value: "//*[@id='p-user-menu-logout']"
+  logoutResults:
+    type: xpath
+    value: "(//h1[normalize-space()='Log out'])[1]"

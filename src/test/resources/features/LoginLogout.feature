@@ -1,4 +1,4 @@
-@LoginLogout
+@LoginLogout @RegressionTest
 Feature: Wikipedia Login Logout Functionality
 
   Background:

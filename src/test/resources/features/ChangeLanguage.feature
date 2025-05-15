@@ -1,4 +1,4 @@
-@ChangeLanguage
+@ChangeLanguage @RegressionTest
 Feature: Wikipedia Change Language Functionality
 
   Background:

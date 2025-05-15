@@ -14,8 +14,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.yaml.snakeyaml.Yaml;
 
 public class CommonActions {
-    private static Map<String, Map<String, String>> repository;
-    private static Map<String, String> currentPagelocators;
+    private static Map<String, Map<String, Map<String, String>>> repository;
+    private static Map<String, Map<String, String>> currentPagelocators;
+
+    public static void setPage(String page) {
+        currentPagelocators = repository.get(page);
+    }
 
     public static void loadRepository() {
         Yaml yaml = new Yaml();
@@ -27,8 +31,22 @@ public class CommonActions {
         currentPagelocators = repository.get(page);
     }
 
-    public static By getXpath(String field) {
-        return By.xpath(currentPagelocators.get(field));
+    public static By getLocator(String field) {
+        Map<String, String> fieldInfo = currentPagelocators.get(field);
+        String type = fieldInfo.get("type");
+        String value = fieldInfo.get("value");
+
+        return switch (type.toLowerCase()) {
+            case "id" -> By.id(value);
+            case "name" -> By.name(value);
+            case "class" -> By.className(value);
+            case "tag" -> By.tagName(value);
+            case "css" -> By.cssSelector(value);
+            case "linktext" -> By.linkText(value);
+            case "partiallinktext" -> By.partialLinkText(value);
+            case "xpath" -> By.xpath(value);
+            default -> throw new IllegalArgumentException("Unknown locator type: " + type);
+        };
     }
 
     public static void navigateTo(String url) {
@@ -51,57 +69,46 @@ public class CommonActions {
         return takesScreenshot.getScreenshotAs(OutputType.BYTES);
     }
 
-
     private static WebElement findElement(String field) {
-        return DriverManager.getDriver().findElement(getXpath(field));
+        return DriverManager.getDriver().findElement(getLocator(field));
     }
 
-    private static WebElement findElement(By xpath) {
-        return DriverManager.getDriver().findElement(xpath);
+    private static WebElement findElement(By locator) {
+        return DriverManager.getDriver().findElement(locator);
     }
 
-    private static List<WebElement> findElements(By xpath) {
-        // TODO
-        waitUntilExpectedCondition(ExpectedConditions.visibilityOfAllElementsLocatedBy(xpath));
-        return DriverManager.getDriver().findElements(xpath);
+    private static List<WebElement> findElements(By locator) {
+        waitUntilExpectedCondition(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        return DriverManager.getDriver().findElements(locator);
     }
-
 
     public static void click(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getXpath(field)));
-        findElement(getXpath(field)).click();
+        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getLocator(field)));
+        findElement(field).click();
     }
 
-
     public static void doubleClick(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getXpath(field)));
-        WebElement element = findElement(getXpath(field));
+        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getLocator(field)));
+        WebElement element = findElement(field);
         Actions actions = new Actions(DriverManager.getDriver());
         actions.doubleClick(element).perform();
 
-        // Verifikasi apakah aksi berhasil dengan menunggu perubahan state pada elemen
         waitUntilExpectedCondition(ExpectedConditions.attributeToBeNotEmpty(element, "class"));
-
-        //TODO
     }
-
 
     public static void enterText(String field, String text) {
-        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getXpath(field)));
-        findElement(getXpath(field)).sendKeys(text);
+        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getLocator(field)));
+        findElement(field).sendKeys(text);
     }
 
-    public static void clearText(String field, String text) {
-        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getXpath(field)));
-        findElement(getXpath(field)).clear();
+    public static void clearText(String field) {
+        waitUntilExpectedCondition(ExpectedConditions.elementToBeClickable(getLocator(field)));
+        findElement(field).clear();
     }
 
     public static String getText(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
-        String actualText = findElement(getXpath(field)).getText();
-
-        // Cetak teks untuk debugging
-//        System.out.println("XPath: " + getXpath(field) + " | Actual text found: " + actualText);
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
+        String actualText = findElement(field).getText();
         return actualText;
     }
 
@@ -110,44 +117,44 @@ public class CommonActions {
         return wait.until(expectedCondition);
     }
 
-    private static <V> V waitUntilExpectedCondition(ExpectedCondition<V> expectedCondition, int timeoutInsSecs) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInsSecs));
+    private static <V> V waitUntilExpectedCondition(ExpectedCondition<V> expectedCondition, int timeoutInSecs) {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSecs));
         return wait.until(expectedCondition);
     }
 
     public static void selectTextFromDropDown(String field, String text) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         select.selectByVisibleText(text);
     }
 
     public static void selectValueFromDropDown(String field, String value) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         select.selectByValue(value);
     }
 
     public static void selectIndexFromDropDown(String field, int index) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         select.selectByIndex(index);
     }
 
     public static void deselectAllFromDropDown(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         select.deselectAll();
     }
 
     public static List<WebElement> getAllSelectedOptionsFromDropDown(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         return select.getAllSelectedOptions();
     }
 
     public static List<WebElement> getAllOptionsFromDropDown(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getXpath(field)));
-        Select select = new Select(findElement(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getLocator(field)));
+        Select select = new Select(findElement(field));
         return select.getOptions();
     }
 
@@ -160,7 +167,7 @@ public class CommonActions {
     }
 
     public static boolean isElementDisplayed(String field) {
-        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getLocator(field)));
         try {
             return findElement(field).isDisplayed();
         } catch (Exception e) {
@@ -170,7 +177,7 @@ public class CommonActions {
 
     public static boolean isElementEnabled(String field) {
         try {
-            waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getXpath(field)));
+            waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getLocator(field)));
             return findElement(field).isEnabled();
         } catch (Exception e) {
             return false;
@@ -179,7 +186,7 @@ public class CommonActions {
 
     public static boolean isElementDisabled(String field) {
         try {
-            waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getXpath(field)));
+            waitUntilExpectedCondition(ExpectedConditions.visibilityOfElementLocated(getLocator(field)));
             return !findElement(field).isEnabled();
         } catch (Exception e) {
             return false;
@@ -191,7 +198,7 @@ public class CommonActions {
     }
 
     public static String getElementAttribute(String field, String attribute) {
-        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getXpath(field)));
+        waitUntilExpectedCondition(ExpectedConditions.presenceOfElementLocated(getLocator(field)));
         return findElement(field).getAttribute(attribute);
     }
 
@@ -263,10 +270,8 @@ public class CommonActions {
         return null;
     }
 
-    // Draws a red border around the found element. Does not set it back anyhow.
     public WebElement highLightElement(String field) {
         WebElement elem = findElement(field);
-        // draw a border around the found element
         if (DriverManager.getDriver() instanceof JavascriptExecutor) {
             ((JavascriptExecutor)DriverManager.getDriver()).executeScript("arguments[0].style.border='3px solid red'", elem);
         }
@@ -278,71 +283,43 @@ public class CommonActions {
     }
 
     public void scrollToElement(String field){
-        WebElement element =findElement(field);
+        WebElement element = findElement(field);
         executeJavaScript("arguments[0].scrollIntoView(true);", element);
     }
-    public Object executeJavaScript(String javaScript){
+
+    public void executeJavaScript(String javaScript){
         JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
-        return js.executeScript(javaScript);
+        js.executeScript(javaScript);
     }
 
-    public Object executeJavaScript(String javaScript, WebElement element){
+    public void executeJavaScript(String javaScript, WebElement element){
         JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
-        return js.executeScript(javaScript, element);
+        js.executeScript(javaScript, element);
     }
-    //TODO
-    //doAction
-public static void doAction(String locator, CommonActions.Events event){
-    Actions actions = new Actions(DriverManager.getDriver());
-    WebElement element = findElement(locator);
-    switch (event) {
-        case CLICK:
-            click(locator);
-            System.out.println("Clicked on: " + locator);
-            break;
-        case DOUBLE_CLICK:
-            actions.doubleClick(element).perform();
-            System.out.println("Double-clicked on: " + locator);
-            break;
-        case RIGHT_CLICK:
-            actions.contextClick(element).perform();
-            System.out.println("Right-clicked on: " + locator);
-            break;
-        case CTRL_CLICK:
-            actions.keyDown(Keys.LEFT_CONTROL).click(element).keyUp(Keys.LEFT_CONTROL).perform();
-            System.out.println("Ctrl+Clicked on: " + locator);
-            break;
-        case SHIFT_CLICK:
-            actions.keyDown(Keys.LEFT_SHIFT).click(element).keyUp(Keys.LEFT_SHIFT).perform();
-            System.out.println("Shift+Clicked on: " + locator);
-            break;
-        case MOUSE_HOVER:
-            actions.moveToElement(element).perform();
-            System.out.println("Hovered on: " + locator);
-            break;
-        case ENTER_KEY:
-            actions.sendKeys(element, Keys.ENTER).perform();
-            System.out.println("Pressed Enter on: " + locator);
-            break;
-        case ESC_KEY:
-            actions.sendKeys(element, Keys.ESCAPE).perform();
-            System.out.println("Pressed Escape on: " + locator);
-            break;
 
-    }
-}
-    public static enum Events{
-        CLICK,
-        DOUBLE_CLICK,
-        CTRL_CLICK,
-        RIGHT_CLICK,
-        SHIFT_CLICK,
-        MOUSE_UP,
-        MOUSE_DOWN,
-        MOUSE_HOVER,
-        ENTER_KEY,
-        ESC_KEY;
-
-        private Events(){}
-    }
+//    public static void doAction(String locator, CommonActions.Events event){
+//        Actions actions = new Actions(DriverManager.getDriver());
+//        WebElement element = findElement(locator);
+//        switch (event) {
+//            case CLICK:
+//                click(locator);
+//                System.out.println("Clicked on: " + locator);
+//                break;
+//            case DOUBLE_CLICK:
+//                actions.doubleClick(element).perform();
+//                System.out.println("Double-clicked on: " + locator);
+//                break;
+//            case RIGHT_CLICK:
+//                actions.contextClick(element).perform();
+//                System.out.println("Right-clicked on: " + locator);
+//                break;
+//            case CTRL_CLICK:
+//                actions.keyDown(Keys.LEFT_CONTROL).click(element).keyUp(Keys.LEFT_CONTROL).perform();
+//                System.out.println("Ctrl+Clicked on: " + locator);
+//                break;
+//            case SHIFT_CLICK:
+//                actions.keyDown(Keys.LEFT_SHIFT).click(element).keyUp(Keys.LEFT_SHIFT).perform();
+//                System.out.println("Shift
+//        }
+//    }
 }
