@@ -10,6 +10,9 @@ SearchResults:
   totalResults: "//div[@class='results-info']/strong[2]"
 Content:
   header: "//*[@id='firstHeading']"
+  filterLanguage: "//div[@id='p-lang-btn']"
+  BahasaIndonesia: "(//a[@title='Selenium – Indonesian'][normalize-space()='Bahasa Indonesia'])[1]"
+  textBahasa: "//div[@id='siteSub']"
 EnglishVersion:
   header: "//*[@id='Welcome_to_Wikipedia']"
   LoginNavbar : "//*[@id='pt-login-2']"
